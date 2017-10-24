@@ -38,19 +38,18 @@ object SyncAll extends App {
 
   val namedArgs = args
     .grouped(2)
-      .map { group =>
-      group.head -> group.last
-    }
+    .map { group => group.head -> group.last }
     .toMap
 
   val storage = new Storage(namedArgs("--output"))
 
-  val pages = namedArgs("--pages").split(",").grouped(2).map {
-    group => Page(group.head, group.last)
-  }
+  val pages = namedArgs("--pages").split(",")
+    .grouped(2)
+    .map { group => Page(group.head, group.last) }
 
   pages.foreach { page =>
-    new Synchronization(namedArgs("--appId"), namedArgs("--appSecret"), namedArgs("--delay").toInt).sync(storage, page)
+    new Synchronization(namedArgs("--appId"), namedArgs("--appSecret"), namedArgs("--delay").toInt)
+      .sync(storage, page)
   }
 
   storage.close()
